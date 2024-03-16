@@ -1027,7 +1027,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: -0.0000000010356871, y: 3.799414e-10, z: -0.000000006873821, w: 1}
-  m_LocalPosition: {x: 0.495265, y: -5.0538034, z: -4.9363303}
+  m_LocalPosition: {x: 0.495265, y: -4.6228037, z: -4.9363303}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1168,6 +1168,10 @@ PrefabInstance:
       propertyPath: CameraCollisionFilter.m_Bits
       value: 384
       objectReference: {fileID: 0}
+    - target: {fileID: 2116386824, guid: dfa7ac6af601d974786ae1015c0c252f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.6981964
+      objectReference: {fileID: 0}
     - target: {fileID: 1466194061405870049, guid: dfa7ac6af601d974786ae1015c0c252f, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -1178,7 +1182,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1466194061405870049, guid: dfa7ac6af601d974786ae1015c0c252f, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.752
+      value: -6.321
       objectReference: {fileID: 0}
     - target: {fileID: 1466194061405870049, guid: dfa7ac6af601d974786ae1015c0c252f, type: 3}
       propertyPath: m_LocalPosition.z
