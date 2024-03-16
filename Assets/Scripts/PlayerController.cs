@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 public class PlayerController : MonoBehaviour
 {
     #region Variables
+
     [SerializeField] private float _sprintSpeed, _walkSpeed, _smoothTime, _mouseSensitivity, _jumpForce;
     [SerializeField] LayerMask _groundLayers;
     [SerializeField] Transform _playerModel;
@@ -14,7 +15,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject _cinemachineCameraTarget;
     [SerializeField] private float _speedChangingSmoothness = 5f;
     [SerializeField] private Animator _animator;
-    [SerializeField] private GroundChecker groundChecker; private Camera cam;
+    [SerializeField] private GroundChecker groundChecker;
+    private Camera cam;
 
     private Vector3 stopPl = Vector3.zero;
     private Rigidbody _rigidbody;
@@ -40,22 +42,19 @@ public class PlayerController : MonoBehaviour
 
     private bool isJumped;
 
-    // shader effect
-    private List<Material> _materials = new();
-    private bool _isShaderEffectOn;
-    private float _shaderEffectCurrentValue;
-    private float _shaderEffectValueTarget;
+    //interactions
+    private bool interacted;
+    private I_Interactable lastInteracted;
+    private bool facedAlready;
+
     #endregion
+
     private void Awake()
     {
         _spawnPosition = transform.position;
         _rigidbody = GetComponent<Rigidbody>();
-        // Get all the materials from the player model
-        foreach (var renderer in GetComponentsInChildren<SkinnedMeshRenderer>())
-        {
-            _materials.Add(renderer.material);
-        }
     }
+
     private void Start()
     {
         Utils.SetMouseLockedState(true);
@@ -71,8 +70,6 @@ public class PlayerController : MonoBehaviour
         {
             case GameManager.State.GameStarted:
                 transform.position = _spawnPosition;
-                _shaderEffectValueTarget = -1.0f;
-                _isShaderEffectOn = true;
                 _isMovable = true;
                 Debug.Log("start isFpsEnabled: " + isFpsEnabled);
                 if (isFpsEnabled)
@@ -80,6 +77,7 @@ public class PlayerController : MonoBehaviour
                     //switch back to camera mode to preferred one by player
                     SwitchCameraMode();
                 }
+
                 break;
 
             case GameManager.State.GameOver:
@@ -90,60 +88,41 @@ public class PlayerController : MonoBehaviour
                     //switch camera mode to fps to see the dissolve effect
                     SwitchCameraMode();
                 }
-                _shaderEffectValueTarget = 1.0f;
-                _isShaderEffectOn = true;
+
                 _isMovable = false;
                 break;
         }
     }
-    // show player destroy effect on die or respawn effect on repositioned
-    private void ChangeMaterialDissolveProperty()
-    {
-        if (!_isShaderEffectOn)
-        {
-            return;
-        }
 
-        _shaderEffectCurrentValue = Mathf.Lerp(_shaderEffectCurrentValue, _shaderEffectValueTarget, Time.deltaTime * 2f);
-
-        foreach (var material in _materials)
-        {
-            material.SetFloat("dissolveAmount", _shaderEffectCurrentValue);
-        }
-
-        if (Mathf.Abs((float)System.Math.Round(_shaderEffectCurrentValue, 1)) >= Mathf.Abs((float)System.Math.Round(_shaderEffectValueTarget, 1)))
-        {
-            _isShaderEffectOn = false;
-            if (_shaderEffectValueTarget == 1.0f)
-            {
-                GameManager.Instance.ChangeState(GameManager.State.GameStarted);
-            }
-        }
-    }
     private void Update()
     {
-        ChangeMaterialDissolveProperty();
         Jump();
+        HandleInteractions();
     }
+
     private void FixedUpdate()
     {
         Move();
     }
+
     private void LateUpdate()
     {
         CameraRotation();
     }
+
     private void OnDestroy()
     {
         GameInput.Instance.OnChangeCam -= GameInput_OnChangeCam;
         GameManager.Instance.OnStateChanged -= GameManager_OnStateChanged;
     }
+
     private void GameInput_OnChangeCam(object sender, System.EventArgs e)
     {
         if (EventSystem.current.currentSelectedGameObject)
             return;
         SwitchCameraMode();
     }
+
     private void SwitchCameraMode()
     {
         fpsCam.enabled = !fpsCam.isActiveAndEnabled;
@@ -152,12 +131,14 @@ public class PlayerController : MonoBehaviour
         //Make player unvisible on fps camera for better result
         Utils.SetRenderLayerInChildren(_playerModel, layer);
     }
+
     private void AssignAnimationIDs()
     {
         _animIDGrounded = Animator.StringToHash("Grounded");
         _animIDJump = Animator.StringToHash("Jump");
         _animIDSpeed = Animator.StringToHash("Speed");
     }
+
     private void Move()
     {
         if (EventSystem.current.currentSelectedGameObject || !_isMovable)
@@ -173,7 +154,7 @@ public class PlayerController : MonoBehaviour
         Vector3 forward = cam.transform.forward;
         Vector3 right = cam.transform.right;
 
-        forward.y = 0f; 
+        forward.y = 0f;
         right.y = 0f;
 
         Vector3 moveDir = (forward * movement.y + right * movement.x).normalized;
@@ -188,6 +169,7 @@ public class PlayerController : MonoBehaviour
         {
             moveAmount = Vector3.SmoothDamp(moveAmount, moveDir * _walkSpeed, ref smoothMoveVelocity, _smoothTime);
         }
+
         _speed = Mathf.Lerp(_speed, moveAmount.magnitude, Time.fixedDeltaTime * _speedChangingSmoothness);
         _animator.SetFloat(_animIDSpeed, _speed);
 
@@ -198,18 +180,72 @@ public class PlayerController : MonoBehaviour
             {
                 float targetAngle = Mathf.Atan2(movement.x, movement.y) * Mathf.Rad2Deg + cam.transform.eulerAngles.y;
                 Quaternion rotation = Quaternion.Euler(0f, targetAngle, 0f);
-                _playerModel.transform.rotation = Quaternion.Lerp(_playerModel.transform.rotation, rotation, Time.deltaTime * 4f);
+                _playerModel.transform.rotation =
+                    Quaternion.Lerp(_playerModel.transform.rotation, rotation, Time.deltaTime * 4f);
             }
         }
         else if (fpsCam.isActiveAndEnabled)
         {
             Quaternion rotation = Quaternion.Euler(0f, cam.transform.eulerAngles.y, 0f);
-            _playerModel.transform.rotation = Quaternion.Lerp(_playerModel.transform.rotation, rotation, Time.deltaTime * 4f);
+            _playerModel.transform.rotation =
+                Quaternion.Lerp(_playerModel.transform.rotation, rotation, Time.deltaTime * 4f);
         }
+
         _rigidbody.MovePosition(transform.position + transform.TransformDirection(moveAmount) * Time.fixedDeltaTime);
 
         CheckFallRespawn();
     }
+
+    private void HandleInteractions()
+    {
+        Ray ray = cam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f));
+        ray.origin = cam.transform.position;
+        float interactDistance = fpsCam.isActiveAndEnabled ? 5: 10;
+        if (Physics.Raycast(ray, out RaycastHit raycastHit, interactDistance))
+        {
+            if (raycastHit.transform.TryGetComponent(out I_Interactable interactableObj))
+            {
+                Debug.Log("gördüm");
+                //interactable object has found
+                interacted = true;
+                lastInteracted = interactableObj;
+                if (!facedAlready)
+                {
+                    interactableObj.OnFaced();
+                    facedAlready = true;
+                }
+
+                if (GameInput.Instance.IsInteractKeyPressed())
+                {
+                    Debug.Log("bastım");
+                    interactableObj.Interact();
+                }
+            }
+            else
+            {
+                if (interacted && lastInteracted != null)
+                {
+                    lastInteracted.OnInteractEnded();
+                    interacted = false;
+                    lastInteracted = null;
+                }
+
+                facedAlready = false;
+            }
+        }
+        else
+        {
+            if (interacted && lastInteracted != null)
+            {
+                lastInteracted.OnInteractEnded();
+                interacted = false;
+                lastInteracted = null;
+            }
+
+            facedAlready = false;
+        }
+    }
+
     private void CheckFallRespawn()
     {
         if (transform.position.y < -12)
@@ -217,10 +253,12 @@ public class PlayerController : MonoBehaviour
             Teleport(_spawnPosition);
         }
     }
+
     public void Teleport(Vector3 pos)
     {
         transform.position = pos;
     }
+
     private void CameraRotation()
     {
         _cinemachineTargetYaw += GameInput.Instance.GetMouseLook().x * _mouseSensitivity;
@@ -230,8 +268,8 @@ public class PlayerController : MonoBehaviour
         _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
         _cinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
             _cinemachineTargetYaw, Time.deltaTime * 4f);
-
     }
+
     private void Jump()
     {
         _isGrounded = groundChecker.isGrounded;
@@ -253,8 +291,10 @@ public class PlayerController : MonoBehaviour
                 isJumped = false;
             }
         }
+
         _animator.SetBool(_animIDGrounded, _isGrounded);
     }
+
     private float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
         if (lfAngle < -360f) lfAngle += 360f;
