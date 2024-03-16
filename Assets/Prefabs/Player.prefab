@@ -64,7 +64,7 @@ MonoBehaviour:
   CameraDistance: 5
   CameraCollisionFilter:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 384
   IgnoreTag: Player
   CameraRadius: 0.169
   DampingIntoCollision: 0
@@ -393,7 +393,7 @@ GameObject:
   - component: {fileID: 5187089170229456592}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -433,7 +433,7 @@ MonoBehaviour:
   _walkSpeed: 2.5
   _smoothTime: 0.15
   _mouseSensitivity: 2
-  _jumpForce: 9
+  _jumpForce: 7.5
   _groundLayers:
     serializedVersion: 2
     m_Bits: 1
