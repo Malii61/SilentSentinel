@@ -7,6 +7,7 @@ public class GroundChecker : MonoBehaviour
     {
         if (other.gameObject.layer == LayerFinder.GetIndex(Layer.Ground))
         {
+            Debug.Log("grounded");
             isGrounded = true;
         }
     }
@@ -14,6 +15,7 @@ public class GroundChecker : MonoBehaviour
     {
         if (other.gameObject.layer == LayerFinder.GetIndex(Layer.Ground))
         {
+            Debug.Log("not grounded");
             isGrounded = false;
         }
     }
