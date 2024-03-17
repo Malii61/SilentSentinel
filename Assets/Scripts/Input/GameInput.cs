@@ -21,7 +21,7 @@ public class GameInput : MonoBehaviour
         inputActions.Player.ChangeCam.performed += ChangeCam_performed;
         inputActions.Player.OpenClosePanel.performed += OpenClosePanel_performed;
     }
-
+    
     private void OpenClosePanel_performed(InputAction.CallbackContext obj)
     {
         OnOpenedOrClosedPanel?.Invoke(this, EventArgs.Empty);
@@ -45,6 +45,11 @@ public class GameInput : MonoBehaviour
     public bool IsJumpButtonPressed()
     {
         return inputActions.Player.Jump.triggered;
+    }
+
+    public bool IsInteractKeyPressed()
+    {
+        return inputActions.Player.Interaction.triggered;
     }
     public Vector2 GetMovementVectorNormalized()
     {
