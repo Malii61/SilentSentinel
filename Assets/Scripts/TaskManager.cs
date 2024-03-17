@@ -38,6 +38,7 @@ public class TaskManager : MonoBehaviour
         if (currentTaskIndex >= _taskArgs.Count)
         {
             Debug.Log("KAZANDIN");
+            return;
         }
         taskTMP.fontStyle = FontStyles.Strikethrough;
         currentTask = _taskArgs[currentTaskIndex];

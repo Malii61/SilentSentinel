@@ -11,6 +11,7 @@ public class Student_Claire : Student
         if (isFirstFaced)
         {
             ShowBubbleText("Engelleri kaldırdığın için teşekkürler.");
+            currentIdle = HAPPY_IDLE;
             Invoke(nameof(HideBubbleText), 3f);
             isFirstFaced = false;
         }

@@ -9,6 +9,13 @@ public class Student_Mark : Student
     public Vector3 ruinCleanedPos;
     public Vector3 ruinCleanedRot;
     private bool isFirstKidTaken;
+
+    protected override void Start()
+    {
+        base.Start();
+        currentIdle = HAPPY_IDLE;
+    }
+
     public override void OnFaced()
     {
         if (isFirstFaced)
@@ -25,6 +32,7 @@ public class Student_Mark : Student
         {
             InteractionTextUI.Instance.ShowText("Yarayı iyileştir\n[E]");
             ShowBubbleText("Bulmuşsun teşekkürler!");
+            Invoke(nameof(HideBubbleText), 3f);
         }
     }
 
@@ -42,10 +50,12 @@ public class Student_Mark : Student
         }
         else if (e.CurrentState == GameManager.State.FirstRuinCleaned)
         {
+            currentIdle = SAD_IDLE;
             rb.MovePosition(ruinCleanedPos);
             rb.MoveRotation(Quaternion.Euler(ruinCleanedRot));
             rb.constraints = RigidbodyConstraints.FreezeRotation;
             isStanding = true;
+            currentIdle = HAPPY_IDLE;
             ShowBubbleText("Teşekkürler. Yardım kiti bulabilir misin?");
         }
         else if (e.CurrentState == GameManager.State.FirsAidKitTaken)
@@ -66,14 +76,13 @@ public class Student_Mark : Student
             isFirstKidTaken = false;
             InteractionTextUI.Instance.Hide();
             GameManager.Instance.ChangeState(GameManager.State.FirstAidKitGiven);
+            ShowBubbleText("Şimdi çok daha iyiyim!");
+            Invoke(nameof(HideBubbleText), 3f);
         }
     }
 
     public override void OnInteractEnded()
     {
-        if (isFirstKidTaken)
-        {
-            InteractionTextUI.Instance.Hide();
-        }
+      
     }
 }

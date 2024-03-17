@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
 
 public class ScreenSwitchUI : MonoBehaviour
 {
@@ -27,6 +27,10 @@ public class ScreenSwitchUI : MonoBehaviour
             case GameManager.State.EnteredFoodPlace:
                 ShowBlackScreen("Yemekhaneye ulaştın.", 1f);
                 break;
+            case GameManager.State.GameFinished:
+                ShowBlackScreen("Herkesi çıkışa ulaştırdın!", 3f);
+                Invoke(nameof(BackToMenu), 2.5f);
+                break;
         }
     }
 
@@ -42,5 +46,10 @@ public class ScreenSwitchUI : MonoBehaviour
     {
         blackScreen.enabled = false;
         screenSwitchTMP.enabled = false;
+    }
+
+    private void BackToMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }

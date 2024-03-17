@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
         FirsAidKitTaken,
         FirstAidKitGiven,
         EnteredFoodPlace,
-        
+        FireStopped,
         GameFinished,
     }
     public static GameManager Instance { get; private set; }
