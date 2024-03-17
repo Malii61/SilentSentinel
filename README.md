@@ -18,8 +18,6 @@ Building
 
 3-https://assetstore.unity.com/packages/3d/environments/school-assets-146253
 
-4-https://assetstore.unity.com/packages/3d/environments/school-assets-146253
-
 5-https://assetstore.unity.com/packages/3d/environments/urban/town-houses-pack-42717
 
 Road
