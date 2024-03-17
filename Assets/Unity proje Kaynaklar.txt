@@ -31,6 +31,16 @@ Objects
 
 2-https://assetstore.unity.com/packages/3d/props/furniture/trash-bin-96670
 
+Skybox
+
+https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014
+
+Menü Arka plan
+Copilot
+
+VFX
+
+https://assetstore.unity.com/packages/vfx/particles/fire-explosions/free-fire-vfx-266227
 
 Note: Some models were taken from blender kit (Free). Some objects we designed ourselves
 
