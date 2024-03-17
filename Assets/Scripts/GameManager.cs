@@ -5,13 +5,20 @@ public class GameManager : MonoBehaviour
 {
     public enum State
     {
+        Initialize,
+        
         GameStarted,
-        GameOver,
+        FirstRuinCleaned,
+        ElectricShutDown,
+        FirsAidKitTaken,
+        FirstAidKitGiven,
+        EnteredFoodPlace,
+        
         GameFinished,
     }
     public static GameManager Instance { get; private set; }
     public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
-    private State _state;
+    private State _state = State.Initialize;
     public class OnStateChangedEventArgs
     {
         public State CurrentState;
@@ -22,6 +29,7 @@ public class GameManager : MonoBehaviour
     }
     public void ChangeState(State state)
     {
+        Debug.Log("change state");
         if (_state == state || _state == State.GameFinished) { return; } 
 
         _state = state;

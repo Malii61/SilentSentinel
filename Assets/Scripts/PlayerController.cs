@@ -5,6 +5,8 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance { get; private set; }
+
     #region Variables
 
     [SerializeField] private float _sprintSpeed, _walkSpeed, _smoothTime, _mouseSensitivity, _jumpForce;
@@ -49,8 +51,12 @@ public class PlayerController : MonoBehaviour
 
     #endregion
 
+    public Vector3 firstSpawnPos;
+    public Vector3 foodPlacePos;
+
     private void Awake()
     {
+        Instance = this;
         _spawnPosition = transform.position;
         _rigidbody = GetComponent<Rigidbody>();
     }
@@ -69,27 +75,10 @@ public class PlayerController : MonoBehaviour
         switch (e.CurrentState)
         {
             case GameManager.State.GameStarted:
-                transform.position = _spawnPosition;
-                _isMovable = true;
-                Debug.Log("start isFpsEnabled: " + isFpsEnabled);
-                if (isFpsEnabled)
-                {
-                    //switch back to camera mode to preferred one by player
-                    SwitchCameraMode();
-                }
-
+                _rigidbody.MovePosition(firstSpawnPos);
                 break;
-
-            case GameManager.State.GameOver:
-                isFpsEnabled = fpsCam.enabled;
-                Debug.Log("isFpsEnabled: " + isFpsEnabled);
-                if (isFpsEnabled)
-                {
-                    //switch camera mode to fps to see the dissolve effect
-                    SwitchCameraMode();
-                }
-
-                _isMovable = false;
+            case GameManager.State.EnteredFoodPlace:
+                _rigidbody.MovePosition(foodPlacePos);
                 break;
         }
     }
@@ -200,7 +189,7 @@ public class PlayerController : MonoBehaviour
     {
         Ray ray = cam.GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f, 0.5f));
         ray.origin = cam.transform.position;
-        float interactDistance = fpsCam.isActiveAndEnabled ? 5: 10;
+        float interactDistance = fpsCam.isActiveAndEnabled ? 5 : 10;
         if (Physics.Raycast(ray, out RaycastHit raycastHit, interactDistance))
         {
             if (raycastHit.transform.TryGetComponent(out I_Interactable interactableObj))

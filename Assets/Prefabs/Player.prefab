@@ -64,7 +64,7 @@ MonoBehaviour:
   CameraDistance: 5
   CameraCollisionFilter:
     serializedVersion: 2
-    m_Bits: 384
+    m_Bits: 448
   IgnoreTag: Player
   CameraRadius: 0.169
   DampingIntoCollision: 0
@@ -266,7 +266,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2116386823}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.4957385, y: 1.528377, z: -4.9426975}
+  m_LocalPosition: {x: 0.4957385, y: 1.528377, z: -4.9426994}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -415,7 +415,7 @@ Transform:
   - {fileID: 976868505}
   - {fileID: 8534238514898508487}
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3486577423531309995
 MonoBehaviour:
@@ -444,6 +444,8 @@ MonoBehaviour:
   _speedChangingSmoothness: 5
   _animator: {fileID: 8700674616872734179}
   groundChecker: {fileID: 2964417585427004476}
+  firstSpawnPos: {x: -0.56, y: -6.33, z: 7.96}
+  foodPlacePos: {x: 11.07, y: -6.33, z: -17.32}
 --- !u!54 &5187089170229456592
 Rigidbody:
   m_ObjectHideFlags: 0
