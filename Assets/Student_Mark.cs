@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class Student : Person
+public class Student_Mark : Student
 {
-
     public override void OnFaced()
     {
     }
