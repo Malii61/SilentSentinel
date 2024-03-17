@@ -3,16 +3,23 @@
 Asset kaynakları:
 
 Car
+
 1-https://assetstore.unity.com/packages/3d/vehicles/land/ambulance-70313
+
 2-https://assetstore.unity.com/packages/3d/vehicles/land/police-car-helicopter-52496
+
 3-https://assetstore.unity.com/packages/3d/environments/school-assets-146253
 
 Building
 
 1-https://assetstore.unity.com/packages/3d/environments/building-apartment-80004
+
 2-https://assetstore.unity.com/packages/3d/props/exterior/old-building-nyc-3-134723
+
 3-https://assetstore.unity.com/packages/3d/environments/school-assets-146253
+
 4-https://assetstore.unity.com/packages/3d/environments/school-assets-146253
+
 5-https://assetstore.unity.com/packages/3d/environments/urban/town-houses-pack-42717
 
 Road
@@ -39,6 +46,7 @@ Skybox
 https://assetstore.unity.com/packages/2d/textures-materials/sky/allsky-free-10-sky-skybox-set-146014
 
 Menü Arka plan
+
 Copilot
 
 VFX
